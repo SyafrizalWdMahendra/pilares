@@ -43,19 +43,19 @@ export const courts = [
 
 export const bookings = [
   {
-    date: new Date(new Date().setHours(9, 0, 0, 0)),
+    date: new Date(new Date().setHours(0, 0, 0, 0)),
     startTime: "09:00",
     customerName: "John Doe",
     status: BookingStatus.confirmed,
   },
   {
-    date: new Date(new Date().setHours(10, 0, 0, 0)),
+    date: new Date(new Date().setHours(0, 0, 0, 0)),
     startTime: "10:00",
     customerName: "Jane Smith",
     status: BookingStatus.confirmed,
   },
   {
-    date: new Date(new Date().setHours(14, 0, 0, 0)),
+    date: new Date(new Date().setHours(0, 0, 0, 0)),
     startTime: "14:00",
     customerName: "Michael Jordan",
     status: BookingStatus.confirmed,
