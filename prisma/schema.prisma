@@ -20,6 +20,9 @@ model Court {
   name        String
   description String?
   bookings    Booking[]
+  available   Boolean   @default(true)
+  capacity    Int @default(4)
+  image String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

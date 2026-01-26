@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar } from "@/src/components/ui/calendar";
 import Stepper from "./Stepper";
 import { Separator } from "@/src/components/ui/separator";
@@ -16,7 +16,7 @@ import TimeSlotSelection from "./TimeSlotSelection";
 import CourtSlotSelection from "./CourtSlotSelection";
 import { PaymentForm } from "./PaymentForm";
 import { format } from "date-fns";
-import { Check } from "lucide-react";
+import { API_BASE_URL } from "@/src/lib/data";
 
 interface ContentProps {
   selectedDate?: Date;
@@ -36,14 +36,15 @@ export default function Content({
   onSelectDate,
   selectedTimeSlot,
   onSelectTimeSlot,
-  selectedCourt,
-  onSelectCourt,
   onPaymentComplete,
   isProcessing,
   setIsProcessing,
   isPaymentSuccess,
 }: ContentProps) {
   const [step, setStep] = useState(0);
+  const [courts, setCourts] = useState<Court[]>([]);
+  const [selectedCourt, setSelectedCourt] = useState<Court | undefined>();
+  const [loading, setLoading] = useState(true);
 
   const timeSlots: TimeSlot[] = selectedDate
     ? getTimeSlotsForDate(selectedDate)
@@ -53,6 +54,31 @@ export default function Content({
     selectedDate && selectedTimeSlot
       ? getCourtsForSlot(selectedDate, selectedTimeSlot.id)
       : [];
+
+  useEffect(() => {
+    const fetchCourts = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/court`);
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch courts");
+        }
+
+        const json = await res.json();
+        setCourts(json.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourts();
+  }, []);
+
+  if (loading) {
+    return <p className="text-center">Loading courts...</p>;
+  }
 
   return (
     <div className="flex flex-col w-full max-w-4xl mx-auto px-12 py-6 rounded-3xl lg:rounded-3xl md:rounded-3xl bg-white shadow-none sm:shadow-lg gap-6 mt-5 md:mt-5">
@@ -107,9 +133,9 @@ export default function Content({
             }
           />
           <CourtSlotSelection
+            courtSlots={courts}
             selectedCourt={selectedCourt}
-            onSelectCourt={onSelectCourt}
-            courtSlots={courtSlots}
+            onSelectCourt={setSelectedCourt}
           />
         </>
       )}

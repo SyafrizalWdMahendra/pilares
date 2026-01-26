@@ -1,6 +1,7 @@
 import { Court } from "@/src/lib/reservationData";
 import { cn } from "@/src/lib/utils";
 import { Check, Users } from "lucide-react";
+import Image from "next/image";
 
 interface CourtSelectionProps {
   selectedCourt: Court | undefined;
@@ -32,16 +33,18 @@ export default function CourtSlotSelection({
           style={{ animationDelay: `${index * 100}ms` }}
         >
           <div className="flex items-start gap-4">
-            <div
+            <Image
+              src={court.image}
+              alt={court.name}
+              width={100}
+              height={100}
               className={cn(
-                "w-14 h-14 rounded-xl flex items-center justify-center text-2xl transition-colors",
+                "w-14 h-14 rounded-xl object-cover transition-colors",
                 selectedCourt?.id === court.id
                   ? "bg-card"
                   : "bg-secondary group-hover:bg-[#e6edf4]",
               )}
-            >
-              {court.image}
-            </div>
+            />
 
             <div className="flex-1">
               <h3
