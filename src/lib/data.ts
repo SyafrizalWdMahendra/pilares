@@ -48,7 +48,7 @@ export const courts = [
     capacity: 20,
     available: true,
     image:
-      "https://images.unsplash.com/photo-1574680096141-9c32f2785bd0?auto=format&fit=crop&q=80&w=800",
+      "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?auto=format&fit=crop&q=80&w=800",
   },
   {
     name: "Mat Pilates Area",
@@ -64,19 +64,19 @@ export const courts = [
 export const bookings = [
   {
     date: new Date(new Date().setHours(0, 0, 0, 0)),
-    startTime: "09:00",
+    startTime: "09:00 - 10:00 AM",
     customerName: "John Doe",
     status: BookingStatus.confirmed,
   },
   {
     date: new Date(new Date().setHours(0, 0, 0, 0)),
-    startTime: "10:00",
+    startTime: "10:00 - 11:00 AM",
     customerName: "Jane Smith",
     status: BookingStatus.confirmed,
   },
   {
     date: new Date(new Date().setHours(0, 0, 0, 0)),
-    startTime: "14:00",
+    startTime: "02:00 - 03:00 PM",
     customerName: "Michael Jordan",
     status: BookingStatus.confirmed,
   },

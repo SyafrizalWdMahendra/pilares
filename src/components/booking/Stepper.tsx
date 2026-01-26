@@ -49,9 +49,9 @@ export default function Stepper({ activeStep }: StepperProps) {
               {stepNumber !== steps.length && (
                 <div
                   className={`
-                    sm:h-px sm:w-15
+                    sm:h-px sm:w-15 h-px
                     transition-colors duration-300 border
-                    ${isLineActive ? "border border-[#3f6489]" : "bg-[#e6edf4]"}
+                    ${isLineActive ? " border border-[#3f6489]" : "bg-[#e6edf4]"}
                   `}
                 />
               )}

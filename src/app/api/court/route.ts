@@ -6,11 +6,15 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const courts = await prisma.court.findMany({
-      orderBy: {
-        name: "asc",
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        capacity: true,
+        available: true,
+        image: true,
       },
     });
-    console.log("court data:", courts);
 
     return NextResponse.json({ data: courts }, { status: 200 });
   } catch (error) {

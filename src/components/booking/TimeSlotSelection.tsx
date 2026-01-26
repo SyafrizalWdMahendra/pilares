@@ -1,77 +1,89 @@
 import { TimeSlot } from "@/src/lib/reservationData";
 import { cn } from "@/src/lib/utils";
-import { Clock, Users } from "lucide-react";
+import { Clock, CheckCircle2, XCircle } from "lucide-react";
+
+interface TimeSlotSelectionProps {
+  selectedTimeSlot: TimeSlot | undefined;
+  onSelectTimeSlot: (slot: TimeSlot) => void;
+  timeSlots: TimeSlot[];
+}
 
 export default function TimeSlotSelection({
   selectedTimeSlot,
   onSelectTimeSlot,
   timeSlots,
-}: {
-  selectedTimeSlot: TimeSlot | undefined;
-  onSelectTimeSlot: (slot: TimeSlot) => void;
-  timeSlots: TimeSlot[];
-}) {
+}: TimeSlotSelectionProps) {
+  if (timeSlots.length === 0) {
+    return (
+      <div className="text-center text-muted-foreground py-10">
+        No slots available for this date.
+      </div>
+    );
+  }
+
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 px-4 mx-auto">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mx-auto w-full h-80 overflow-y-scroll">
       {timeSlots.map((slot, index) => {
-        const isSelected = selectedTimeSlot?.id === slot.id;
+        const isAvailable = slot.isAvailable;
+        const isSelected = selectedTimeSlot?.time === slot.time;
+
         return (
           <button
-            key={slot.id}
-            onClick={() => slot.available && onSelectTimeSlot(slot)}
-            disabled={!slot.available}
+            key={slot.time}
+            type="button"
+            onClick={() => isAvailable && onSelectTimeSlot(slot)}
+            disabled={!isAvailable}
             className={cn(
-              "group relative p-4 rounded-xl border-2 transition-all duration-300",
-              "animate-slide-up",
-              slot.available
+              "relative group flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-200 w-full h-full aspect-4/3",
+              "animate-in fade-in zoom-in-95 duration-300 fill-mode-backwards",
+              isAvailable
                 ? isSelected
-                  ? "border-[#3f6489] bg-[#e6edf4]"
-                  : "border-2 bg-card hover:border-[#e6edf4] hover:shadow-lg hover:shadow-[#e6edf4] cursor-pointer"
-                : "border-border bg-muted/50 cursor-not-allowed opacity-60",
+                  ? "border-[#3f6489] bg-[#e6edf4] shadow-md cursor-pointer"
+                  : "border-gray-200 bg-white hover:border-[#3f6489]/50 hover:shadow-sm hover:-translate-y-0.5 cursor-pointer"
+                : "border-gray-100 bg-gray-50 opacity-60 cursor-not-allowed grayscale",
             )}
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-center gap-2 z-10">
               <Clock
                 className={cn(
-                  "w-5 h-5 transition-colors",
+                  "w-5 h-5 mb-1",
                   isSelected
                     ? "text-[#3f6489]"
-                    : "text-muted-foreground group-hover:text-primary",
+                    : "text-gray-400 group-hover:text-[#3f6489]",
                 )}
               />
+
               <span
                 className={cn(
-                  "font-semibold text-md",
-                  isSelected ? "text-[#3f6489]" : "text-foreground",
+                  "font-semibold text-sm text-center leading-tight",
+                  isSelected ? "text-[#3f6489]" : "text-gray-700",
                 )}
               >
                 {slot.time}
               </span>
-              <div
-                className={cn(
-                  "flex items-center gap-1 text-xs",
-                  slot.available
-                    ? slot.spotsLeft <= 3
-                      ? "text-terracotta"
-                      : "text-muted-foreground"
-                    : "text-muted-foreground",
-                )}
-              >
-                <Users className="w-3 h-3" />
-                {slot.available ? (
-                  <span>
-                    {slot.spotsLeft} {slot.spotsLeft === 1 ? "spot" : "spots"}{" "}
-                    left
-                  </span>
+
+              <div className="flex items-center gap-1.5 mt-1">
+                {isAvailable ? (
+                  <>
+                    <CheckCircle2 className="w-3 h-3 text-green-600" />
+                    <span className="text-[10px] font-medium text-green-700 uppercase tracking-wide">
+                      Available
+                    </span>
+                  </>
                 ) : (
-                  <span>Fully booked</span>
+                  <>
+                    <XCircle className="w-3 h-3 text-red-400" />
+                    <span className="text-[10px] font-medium text-red-400 uppercase tracking-wide">
+                      Booked
+                    </span>
+                  </>
                 )}
               </div>
             </div>
 
             {isSelected && (
-              <div className="absolute top-2 right-2 w-3 h-3 rounded-full bg-[#3f6489] animate-scale-in" />
+              <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#3f6489] animate-ping" />
             )}
           </button>
         );

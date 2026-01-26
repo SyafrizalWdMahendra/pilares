@@ -13,8 +13,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const bookingDate = new Date(date);
-    bookingDate.setHours(0, 0, 0, 0);
+    const bookingDate = new Date(`${date}T00:00:00Z`);
 
     const existingBooking = await prisma.booking.findFirst({
       where: {
@@ -38,7 +37,7 @@ export async function POST(request: Request) {
         date: bookingDate,
         startTime,
         customerName,
-        status: "confirmed",
+        status: "pending",
       },
     });
 
