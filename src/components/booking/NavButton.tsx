@@ -42,7 +42,7 @@ export default function NavButton() {
             disabled={isNextDisabled}
             className={`flex items-center justify-center gap-2 px-6 py-2 rounded-lg transition-all duration-300 ${
               isNextDisabled
-                ? "bg-[#e6edf4] text-gray-400 cursor-not-allowed"
+                ? "bg-[#e6edf4] text-gray-400"
                 : "group flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#3f6489] text-white shadow-md transition-all duration-200 cursor-pointer"
             }`}
           >
