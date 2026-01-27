@@ -4,7 +4,6 @@
 
 ## 🚀 Live Demo
 **[View Live Demo](https://pilares-nu.vercel.app/)**
-*(Replace with your Vercel/Netlify link, or remove if running locally only)*
 
 ## 📋 Overview
 This application streamlines the reservation process for Pilates classes. It features a user-friendly 3-step wizard flow allowing users to select a date, choose a studio, pick a time slot, and complete the booking with a simulated payment process.
