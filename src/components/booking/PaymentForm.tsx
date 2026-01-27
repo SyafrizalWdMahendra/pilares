@@ -3,37 +3,41 @@
 import { useState } from "react";
 import { Lock, Calendar, User } from "lucide-react";
 import { format } from "date-fns";
-import { BOOKING_PRICE, Court, TimeSlot } from "@/src/lib/reservationData";
-import { cn } from "@/src/lib/utils";
+import { cn, rupiahFormat } from "@/src/lib/utils";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import Image from "next/image";
+import { useBookingStore } from "@/src/store/useBookingStore";
 
-interface PaymentFormProps {
-  selectedDate: Date;
-  selectedTimeSlot: TimeSlot;
-  selectedCourt: Court;
-  onPaymentComplete: (name: string, date: Date, time: string) => void;
-  isProcessing: boolean;
-  setIsProcessing: (value: boolean) => void;
-}
+export const PaymentForm = () => {
+  const {
+    selectedDate,
+    selectedTimeSlot,
+    selectedCourt,
+    isProcessingPayment,
+    submitBooking,
+  } = useBookingStore();
 
-export const PaymentForm = ({
-  selectedDate,
-  selectedTimeSlot,
-  selectedCourt,
-  onPaymentComplete,
-  isProcessing,
-}: PaymentFormProps) => {
   const [customerName, setCustomerName] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customerName) return alert("Nama wajib diisi!");
 
-    onPaymentComplete(customerName, selectedDate, selectedTimeSlot.time);
+    if (!customerName) return;
+    if (!selectedCourt) return;
+
+    await submitBooking(customerName, selectedCourt.amount);
   };
+
+  if (!selectedDate || !selectedTimeSlot || !selectedCourt) {
+    return (
+      <div className="text-center p-10 text-muted-foreground bg-gray-50 rounded-xl border border-dashed">
+        <p>Data reservasi tidak lengkap.</p>
+        <p className="text-sm">Silakan kembali ke langkah awal.</p>
+      </div>
+    );
+  }
 
   const isFormValid = customerName.length >= 2;
 
@@ -73,11 +77,19 @@ export const PaymentForm = ({
               <span>{selectedCourt.name}</span>
             </div>
           </div>
+          <div className="border-t border-[#3f6489] mt-6 pt-4">
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-[#3f6489]">Total</span>
+              <span className="font-display text-lg font-bold text-[#3f6489]">
+                {rupiahFormat(selectedCourt.amount)}
+              </span>
+            </div>
+          </div>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="md:col-span-3 bg-card rounded-2xl shadow-lg p-6 animate-slide-up"
+          className="md:col-span-3 bg-card border rounded-2xl p-6 animate-slide-up"
           style={{ animationDelay: "100ms" }}
         >
           <div className="flex items-center gap-2 mb-4 text-sm text-muted-foreground">
@@ -88,7 +100,7 @@ export const PaymentForm = ({
           <div className="space-y-4">
             <div>
               <Label htmlFor="name" className="text-sm font-medium">
-                Cardholder Name
+                Customer Name
               </Label>
               <div className="relative mt-1">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -97,7 +109,7 @@ export const PaymentForm = ({
                   className="border p-2 rounded w-full pl-10"
                   value={customerName}
                   onChange={(e) => setCustomerName(e.target.value)}
-                  placeholder="Masukkan nama Anda"
+                  placeholder="Enter your full name"
                   required
                 />
               </div>
@@ -105,7 +117,7 @@ export const PaymentForm = ({
 
             <Button
               type="submit"
-              disabled={!isFormValid || isProcessing}
+              disabled={!isFormValid || isProcessingPayment}
               className={cn(
                 "w-full h-12 mt-4 font-semibold text-base transition-all duration-300",
                 isFormValid
@@ -113,13 +125,13 @@ export const PaymentForm = ({
                   : "bg-[#e6edfa] text-muted-foreground",
               )}
             >
-              {isProcessing ? (
+              {isProcessingPayment ? (
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
                   Processing...
                 </div>
               ) : (
-                `Pay $${BOOKING_PRICE}`
+                "Pay"
               )}
             </Button>
           </div>

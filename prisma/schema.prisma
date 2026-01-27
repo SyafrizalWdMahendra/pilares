@@ -21,8 +21,9 @@ model Court {
   description String?
   bookings    Booking[]
   available   Boolean   @default(true)
-  capacity    Int @default(4)
-  image String
+  capacity    Int       @default(4)
+  image       String
+  amount Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -31,6 +32,7 @@ model Court {
 model Booking {
   id            Int           @id @default(autoincrement())
   courtId       Int
+  code          String?        @unique
   court         Court         @relation(fields: [courtId], references: [id])
   date          DateTime
   startTime     String

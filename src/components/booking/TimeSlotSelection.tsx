@@ -1,19 +1,11 @@
-import { TimeSlot } from "@/src/lib/reservationData";
 import { cn } from "@/src/lib/utils";
+import { useBookingStore } from "@/src/store/useBookingStore";
 import { Clock, CheckCircle2, XCircle } from "lucide-react";
 
-interface TimeSlotSelectionProps {
-  selectedTimeSlot: TimeSlot | undefined;
-  onSelectTimeSlot: (slot: TimeSlot) => void;
-  timeSlots: TimeSlot[];
-}
+export default function TimeSlotSelection() {
+  const { timeSlots, selectedTimeSlot, selectTimeSlot } = useBookingStore();
 
-export default function TimeSlotSelection({
-  selectedTimeSlot,
-  onSelectTimeSlot,
-  timeSlots,
-}: TimeSlotSelectionProps) {
-  if (timeSlots.length === 0) {
+  if (!timeSlots || timeSlots.length === 0) {
     return (
       <div className="text-center text-muted-foreground py-10">
         No slots available for this date.
@@ -22,7 +14,7 @@ export default function TimeSlotSelection({
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mx-auto w-full h-80 overflow-y-scroll">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mx-auto w-full pr-2 h-80 overflow-auto">
       {timeSlots.map((slot, index) => {
         const isAvailable = slot.isAvailable;
         const isSelected = selectedTimeSlot?.time === slot.time;
@@ -31,7 +23,7 @@ export default function TimeSlotSelection({
           <button
             key={slot.time}
             type="button"
-            onClick={() => isAvailable && onSelectTimeSlot(slot)}
+            onClick={() => isAvailable && selectTimeSlot(slot)}
             disabled={!isAvailable}
             className={cn(
               "relative group flex flex-col items-center justify-center p-4 rounded-xl border transition-all duration-200 w-full h-full aspect-4/3",

@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import prisma from "@/src/lib/prisma";
+import { generateRandomString } from "@/src/lib/utils";
+import {
+  PaymentRequestParameters,
+  PaymentRequest,
+} from "xendit-node/payment_request/models";
+import xenditClient from "@/src/lib/xendit";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { courtId, date, startTime, customerName } = body;
+    const { courtId, date, startTime, customerName, amount } = body;
 
-    if (!courtId || !date || !startTime || !customerName) {
+    if (!courtId || !date || !startTime || !customerName || !amount) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 },
@@ -31,6 +39,8 @@ export async function POST(request: Request) {
       );
     }
 
+    let redirectPaymentUrl = "/";
+
     const newBooking = await prisma.booking.create({
       data: {
         courtId,
@@ -38,19 +48,49 @@ export async function POST(request: Request) {
         startTime,
         customerName,
         status: "pending",
+        code: generateRandomString(15),
       },
     });
+
+    if (!newBooking.code) {
+      return NextResponse.json(
+        { error: "Failed to generate booking code." },
+        { status: 500 },
+      );
+    }
+
+    const data: PaymentRequestParameters = {
+      amount: amount,
+      paymentMethod: {
+        ewallet: {
+          channelProperties: {
+            successReturnUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/payment-success`,
+          },
+          channelCode: "SHOPEEPAY",
+        },
+        reusability: "ONE_TIME_USE",
+        type: "EWALLET",
+      },
+      currency: "IDR",
+      referenceId: newBooking.code.toString(),
+    };
+
+    const response: PaymentRequest =
+      await xenditClient.PaymentRequest.createPaymentRequest({
+        data,
+      });
+
+    redirectPaymentUrl =
+      response.actions?.find((val) => val.urlType === "DEEPLINK")?.url ?? "/";
 
     return NextResponse.json(
       {
         message: "Booking successful",
-        data: newBooking,
+        redirectPaymentUrl,
       },
       { status: 201 },
     );
   } catch (error: any) {
-    console.error("Booking error:", error);
-
     if (error.code === "P2002") {
       return NextResponse.json(
         { error: "Slot has just been taken by another user." },

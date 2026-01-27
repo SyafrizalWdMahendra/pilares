@@ -40,8 +40,6 @@ export async function GET(request: Request) {
 
     const bookedTimes = bookedSlots.map((b) => b.startTime);
 
-    console.log(`Availability Check untuk ${cleanDateStr}:`, bookedTimes);
-
     const availableSlots = TIME_SLOTS.map((slotLabel) => {
       const slotStartTime = slotLabel.split(" - ")[0];
 
@@ -59,7 +57,6 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ data: availableSlots }, { status: 200 });
   } catch (error) {
-    console.error("Error checking availability:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

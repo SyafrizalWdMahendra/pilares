@@ -1,8 +1,5 @@
+import { StepperProps } from "@/src/lib/reservationData";
 import { Check } from "lucide-react";
-
-interface StepperProps {
-  activeStep: number;
-}
 
 export default function Stepper({ activeStep }: StepperProps) {
   const steps = ["Date", "Time", "Studio", "Payment"];
