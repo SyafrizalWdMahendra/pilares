@@ -7,8 +7,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const { courtId, date, startTime, customerName, amount } = body;
-    if (!courtId || !date || !startTime || !customerName || !amount) {
+    const { courtId, date, startTime, customerName, customerEmail, amount } =
+      body;
+    if (
+      !courtId ||
+      !date ||
+      !startTime ||
+      !customerName ||
+      !customerEmail ||
+      !amount
+    ) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 },
@@ -20,6 +28,7 @@ export async function POST(request: Request) {
       date,
       startTime,
       customerName,
+      customerEmail,
       amount,
     });
 

@@ -8,6 +8,7 @@ import {
   MapPin,
   Loader2,
   User,
+  Mail,
 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import { rupiahFormat } from "@/src/lib/utils";
@@ -45,7 +46,7 @@ export default function PaymentSuccess() {
     );
   }
 
-  const { date, slot, court, customerName } = displayData;
+  const { date, slot, court, customerName, customerEmail } = displayData;
 
   return (
     <div className="animate-in fade-in zoom-in-95 duration-500 text-center max-w-xl mx-auto py-10 px-6 bg-[#e6edf4] h-dvh">
@@ -64,6 +65,11 @@ export default function PaymentSuccess() {
             icon={User}
             label="Customer Name"
             value={customerName || "-"}
+          />
+          <InfoRow
+            icon={Mail}
+            label="Customer Email"
+            value={customerEmail || "-"}
           />
           <InfoRow
             icon={Calendar}

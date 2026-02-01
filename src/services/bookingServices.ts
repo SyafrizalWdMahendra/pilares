@@ -9,6 +9,7 @@ export const createBookingTransaction = async ({
   date,
   startTime,
   customerName,
+  customerEmail,
   amount,
 }: BookingParams) => {
   const bookingDate = new Date(`${date}T00:00:00Z`);
@@ -33,6 +34,7 @@ export const createBookingTransaction = async ({
       date: bookingDate,
       startTime,
       customerName,
+      customerEmail,
       status: "pending",
       code,
     },

@@ -1,4 +1,4 @@
-import prisma from "./prisma";
+import z from "zod";
 
 export interface TimeSlot {
   time: string;
@@ -48,7 +48,11 @@ export interface BookingState {
   selectTimeSlot: (slot: TimeSlot) => void;
   setProcessingPayment: (status: boolean) => void;
   setPaymentSuccess: (status: boolean) => void;
-  submitBooking: (customerName: string, amount: number) => Promise<void>;
+  submitBooking: (
+    customerName: string,
+    amount: number,
+    customerEmail: string,
+  ) => Promise<void>;
   fetchCourts: () => Promise<void>;
   fetchSlots: () => Promise<void>;
   resetFlow: () => void;
@@ -72,6 +76,7 @@ export interface DisplayData {
   slot: any;
   court: any;
   customerName?: string;
+  customerEmail?: string;
 }
 
 export interface BookingParams {
@@ -79,5 +84,13 @@ export interface BookingParams {
   date: string;
   startTime: string;
   customerName: string;
+  customerEmail: string;
   amount: number;
 }
+
+export const paymentSchema = z.object({
+  customerName: z.string().min(3, "Nama minimal 3 karakter"),
+  customerEmail: z.string().email("Format email tidak valid"),
+});
+
+export type PaymentFormValues = z.infer<typeof paymentSchema>;

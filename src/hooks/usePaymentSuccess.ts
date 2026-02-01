@@ -31,6 +31,7 @@ export function usePaymentSuccess() {
         slot: selectedTimeSlot,
         court: selectedCourt,
         customerName: "Guest",
+        customerEmail: "example@gmail.com",
       });
       setIsLoading(false);
       return;

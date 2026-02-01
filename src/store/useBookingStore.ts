@@ -95,7 +95,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       isPaymentSuccess: false,
     }),
 
-  submitBooking: async (customerName, amount) => {
+  submitBooking: async (customerName, amount, customerEmail) => {
     const { selectedCourt, selectedDate, selectedTimeSlot } = get();
 
     if (!selectedCourt?.id || !selectedDate || !selectedTimeSlot) {
@@ -110,6 +110,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       date: format(selectedDate, "yyyy-MM-dd"),
       startTime: selectedTimeSlot.time,
       customerName: customerName,
+      customerEmail: customerEmail,
       amount: amount,
     };
 
@@ -129,6 +130,7 @@ export const useBookingStore = create<BookingState>((set, get) => ({
         slot: selectedTimeSlot,
         amount: amount,
         customerName: customerName,
+        customerEmail: customerEmail,
       };
 
       localStorage.setItem("latestBooking", JSON.stringify(backupData));
