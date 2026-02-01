@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧘‍♀️ DIRO Pilates Reservation App
 
-## Getting Started
+> A modern, responsive web application for booking Pilates sessions, built for the DIRO Technical Test.
 
-First, run the development server:
+## 🚀 Live Demo
+**[View Live Demo](https://pilares-nu.vercel.app/)**
+
+## 📋 Overview
+This application streamlines the reservation process for Pilates classes. It features a user-friendly 3-step wizard flow allowing users to select a date, choose a studio, pick a time slot, and complete the booking with a simulated payment process.
+
+The project focuses on **Clean Architecture**, **State Management**, and **User Experience (UX)**.
+
+## ✨ Key Features
+- **3-Step Booking Wizard:** Intuitive flow (Date Selection -> Studio Selection -> Time Slot).
+- **Global State Management:** Powered by **Zustand** to eliminate prop drilling and manage reservation flow efficiently.
+- **Robust Validation:** Prevents users from proceeding without selecting required data.
+- **Data Persistence:** Booking details are securely backed up to `LocalStorage` to prevent data loss on page refresh (Success Page).
+- **Responsive UI:** Built with **Tailwind CSS** and **Shadcn UI** for a seamless mobile and desktop experience.
+- **Mock Payment Integration:** Simulated payment flow with success receipt generation.
+
+## 🛠️ Tech Stack
+
+**Frontend:**
+- **Framework:** Next.js 14 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Components:** Shadcn UI (Radix Primitives)
+- **Icons:** Lucide React
+
+**State Management & Logic:**
+- **Zustand:** For global client-side state.
+- **Date-fns:** For robust date manipulation.
+- **Sonner:** For toast notifications.
+
+## 📂 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+src/
+├── app/                  # Next.js App Router pages
+│   ├── api/              # API Routes (Mock Backend)
+│   ├── payment-success/  # Success Page
+│   └── page.tsx          # Main Booking Flow
+├── components/
+│   ├── booking/          # Booking specific components (Wizard, Slots, Form)
+│   └── ui/               # Reusable UI components (Buttons, Inputs)
+├── store/
+│   └── useBookingStore.ts # Zustand Store (Centralized Logic)
+├── lib/
+│   └── utils.ts          # Helper functions (Currency formatter, etc.)
+└── types/                # TypeScript interfaces
