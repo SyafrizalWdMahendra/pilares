@@ -73,3 +73,11 @@ export interface DisplayData {
   court: any;
   customerName?: string;
 }
+
+export interface BookingParams {
+  courtId: number;
+  date: string;
+  startTime: string;
+  customerName: string;
+  amount: number;
+}
