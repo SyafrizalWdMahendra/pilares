@@ -1,4 +1,3 @@
-"use client";
 import Content from "../components/booking/Content";
 import Footer from "../components/booking/Footer";
 import Navbar from "../components/booking/Navbar";
