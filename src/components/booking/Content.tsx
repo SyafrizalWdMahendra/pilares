@@ -7,11 +7,13 @@ import { Separator } from "@/src/components/ui/separator";
 import Stepper from "./Stepper";
 import NavButton from "./NavButton";
 import Header from "./Header";
-import TimeSlotSelection from "./TimeSlotSelection";
-import CourtSlotSelection from "./CourtSlotSelection";
-import { PaymentForm } from "./PaymentForm";
 import { Loader2 } from "lucide-react";
-import SuccessView from "./SuccessView";
+import {
+  LazyCourtSlotSelection,
+  LazyPaymentForm,
+  LazyPaymentSuccess,
+  LazyTimeSlotSelection,
+} from "./LazyComponents";
 
 export default function Content() {
   const {
@@ -57,7 +59,7 @@ export default function Content() {
               <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
             </div>
           ) : (
-            <CourtSlotSelection />
+            <LazyCourtSlotSelection />
           )}
         </div>
       )}
@@ -72,7 +74,7 @@ export default function Content() {
               </p>
             </div>
           ) : (
-            <TimeSlotSelection />
+            <LazyTimeSlotSelection />
           )}
         </div>
       )}
@@ -80,9 +82,11 @@ export default function Content() {
       {step === 3 && (
         <div className="animate-fade-in">
           {isPaymentSuccess ? (
-            <SuccessView />
+            <LazyPaymentSuccess />
           ) : (
-            selectedDate && selectedTimeSlot && selectedCourt && <PaymentForm />
+            selectedDate &&
+            selectedTimeSlot &&
+            selectedCourt && <LazyPaymentForm />
           )}
         </div>
       )}
