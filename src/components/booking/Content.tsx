@@ -11,7 +11,7 @@ import TimeSlotSelection from "./TimeSlotSelection";
 import CourtSlotSelection from "./CourtSlotSelection";
 import { PaymentForm } from "./PaymentForm";
 import { Loader2 } from "lucide-react";
-import PaymentSuccess from "@/src/app/payment-success/page";
+import SuccessView from "./SuccessView";
 
 export default function Content() {
   const {
@@ -80,7 +80,7 @@ export default function Content() {
       {step === 3 && (
         <div className="animate-fade-in">
           {isPaymentSuccess ? (
-            <PaymentSuccess />
+            <SuccessView />
           ) : (
             selectedDate && selectedTimeSlot && selectedCourt && <PaymentForm />
           )}
