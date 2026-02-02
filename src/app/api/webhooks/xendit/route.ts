@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       const booking = await tx.booking.findFirst({ where: { code } });
 
       if (!booking) {
-        throw new Error(`Booking with code ${code} not found`);
+        return NextResponse.json({ status: "ignored" }, { status: 200 });
       }
 
       if (booking.status === "confirmed") return;
