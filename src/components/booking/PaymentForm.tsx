@@ -2,14 +2,14 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, User, Mail } from "lucide-react";
+import { Lock, User, Mail, MapPlus, Clock, Calendar } from "lucide-react";
 import { cn, rupiahFormat } from "@/src/lib/utils";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { useBookingStore } from "@/src/store/useBookingStore";
 import { PaymentFormValues, paymentSchema } from "@/src/lib/reservationData";
 import { usePaymentForm } from "@/src/hooks/usePaymentForm";
+import { FormInput } from "../ui/form-input";
+import Image from "next/image";
 
 export const PaymentForm = () => {
   const { selectedDate, selectedTimeSlot, selectedCourt, isProcessingPayment } =
@@ -40,13 +40,28 @@ export const PaymentForm = () => {
           <h3 className="font-display text-md font-semibold mb-4 text-[#3f6489]">
             Booking Summary
           </h3>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm text-[#3f6489]">
             <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              <span>{selectedDate.toLocaleDateString()}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>{selectedTimeSlot.time}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Image
+                src={selectedCourt.image}
+                alt={selectedCourt.name}
+                width={80}
+                height={80}
+                className="rounded-lg object-cover w-4 h-4"
+              />
               <span>{selectedCourt.name}</span>
             </div>
-            <div className="flex justify-between items-center mt-4 pt-4 border-t border-[#3f6489]">
+            <div className="flex justify-between items-center mt-4 pt-4 border-t border-[#3f6489] text-[#3f6489]">
               <span className="font-medium">Total</span>
-              <span className="font-bold">
+              <span className="font-bold ">
                 {rupiahFormat(selectedCourt.amount)}
               </span>
             </div>
@@ -63,58 +78,33 @@ export const PaymentForm = () => {
           </div>
 
           <div className="space-y-4">
-            <div>
-              <Label htmlFor="customerName" className="text-sm font-medium">
-                Customer Name
-              </Label>
-              <div className="relative mt-1">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  {...register("customerName")}
-                  className={cn(
-                    "pl-10",
-                    errors.customerName &&
-                      "border-red-500 focus-visible:ring-red-500",
-                  )}
-                  placeholder="Enter your full name"
-                />
-              </div>
-              {errors.customerName && (
-                <p className="text-xs text-red-500 mt-1">
-                  {errors.customerName.message}
-                </p>
-              )}
-            </div>
+            <FormInput
+              label="Customer Name"
+              name="customerName"
+              placeholder="Enter your full name"
+              icon={User}
+              register={register}
+              error={errors.customerName}
+            />
 
-            <div>
-              <Label htmlFor="customerEmail" className="text-sm font-medium">
-                Email Address
-              </Label>
-              <div className="relative mt-1">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  {...register("customerEmail")}
-                  type="email"
-                  className={cn(
-                    "pl-10",
-                    errors.customerEmail && "border-red-500",
-                  )}
-                  placeholder="name@example.com"
-                />
-              </div>
-              {errors.customerEmail && (
-                <p className="text-xs text-red-500 mt-1">
-                  {errors.customerEmail.message}
-                </p>
-              )}
-            </div>
+            <FormInput
+              label="Email Address"
+              name="customerEmail"
+              type="email"
+              placeholder="name@example.com"
+              icon={Mail}
+              register={register}
+              error={errors.customerEmail}
+            />
 
             <Button
               type="submit"
               disabled={!isValid || isProcessingPayment}
               className={cn(
                 "w-full h-12 mt-4 font-semibold text-base transition-all",
-                isValid ? "bg-[#3f6489] cursor-pointer" : "bg-[#e6edfa] text-muted-foreground",
+                isValid
+                  ? "bg-[#3f6489] cursor-pointer"
+                  : "bg-[#e6edfa] text-muted-foreground",
               )}
             >
               {isProcessingPayment ? "Processing..." : "Pay Now"}

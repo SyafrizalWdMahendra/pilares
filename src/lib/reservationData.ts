@@ -1,3 +1,10 @@
+import { LucideIcon } from "lucide-react";
+import {
+  FieldError,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from "react-hook-form";
 import z from "zod";
 
 export interface TimeSlot {
@@ -94,3 +101,13 @@ export const paymentSchema = z.object({
 });
 
 export type PaymentFormValues = z.infer<typeof paymentSchema>;
+
+export interface FormInputProps<
+  T extends FieldValues,
+> extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  name: Path<T>;
+  register: UseFormRegister<T>;
+  error?: FieldError;
+  icon?: LucideIcon;
+}
