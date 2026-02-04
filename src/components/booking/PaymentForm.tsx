@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, User, Mail, MapPlus, Clock, Calendar } from "lucide-react";
+import { Lock, User, Mail, Clock, Calendar } from "lucide-react";
 import { cn, rupiahFormat } from "@/src/lib/utils";
 import { Button } from "../ui/button";
 import { useBookingStore } from "@/src/store/useBookingStore";
